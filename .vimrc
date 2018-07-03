@@ -1,21 +1,37 @@
 "去掉vi的一致性"
 set nocompatible
+
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'scrooloose/nerdtree'
+Plugin 'Yggdroot/indentLine'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'tell-k/vim-autopep8'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'altercation/vim-colors-solarized'
+"Plugin 'w0rp/ale'
+Plugin 'scrooloose/syntastic'
+Plugin 'nvie/vim-flake8'
+call vundle#end()
+filetype plugin indent on
+
+
 "显示行号"
 set number
 " 隐藏滚动条"    
-set guioptions-=r 
-set guioptions-=L
-set guioptions-=b
+"set guioptions-=r 
+"set guioptions-=L
+"set guioptions-=b
 "隐藏顶部标签栏"
-set showtabline=0
+"set showtabline=0
 "设置字体"
 "set guifont=Monaco:h13         
-syntax on   "开启语法高亮"
-"let g:solarized_termcolors=256  "solarized主题设置在终端下的设置"
-set background=dark     "设置背景色"
-"colorscheme solarized
-set nowrap  "设置不折行"
-set fileformat=unix "设置以unix的格式保存文件"
+"set nowrap  "设置不折行"
+"set fileformat=unix "设置以unix的格式保存文件"
 "set cindent     "设置C样式的缩进格式"
 set tabstop=4   "设置table长度"
 set shiftwidth=4        "同上"
@@ -35,38 +51,43 @@ set noexpandtab     "不允许扩展table"
 set whichwrap+=<,>,h,l
 set autoread
 set cursorline      "突出显示当前行"
-set cursorcolumn        "突出显示当前列"
+"set cursorcolumn        "突出显示当前列"
+syntax on   "开启语法高亮"
+"set background=dark     "设置背景色"
+"colorscheme solarized
+"let g:solarized_termcolors=256  "solarized主题设置在终端下的设置"
+
+"syntastic
+let python_highlight_all=1
+"设置error和warning的标志
+let g:syntastic_enable_signs=1
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='►'
+"总是打开Location
+"List（相当于QuickFix）窗口，如果你发现syntastic因为与其他插件冲突而经常崩溃，将下面选项置0
+let g:syntastic_always_populate_loc_list = 0
+"自动打开LocatonList，默认值为2，表示发现错误时不自动打开，当修正以后没有再发现错误时自动关闭，置1表示自动打开自动关闭，0表示关闭自动打开和自动关闭，3表示自动打开，但不自动关闭
+let g:syntastic_auto_loc_list = 2
+"修改Locaton List窗口高度
+let g:syntastic_loc_list_height = 3
+"打开文件时自动进行检查
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+"自动跳转到发现的第一个错误或警告处
+let g:syntastic_auto_jump = 1
+"高亮错误
+let g:syntastic_enable_highlighting=0
+"设置pyflakes为默认的python语法检查工具
+let g:syntastic_python_checkers = ['pyflakes']
 
 "按F5运行python"
-map <F5> :Autopep8<CR> :w<CR> :call RunPython()<CR>
+map <F5> :call RunPython()<CR>
 function RunPython()
-    let mp = &makeprg
-    let ef = &errorformat
-    let exeFile = expand("%:t")
-    setlocal makeprg=python\ -u
-    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-    silent make %
-    copen
-    let &makeprg = mp
-    let &errorformat = ef
+	exec "W"
+	if &filetype == 'python'
+		exec "!time python %"
+	endif
 endfunction
-
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'Lokaltog/vim-powerline'
-Plugin 'scrooloose/nerdtree'
-Plugin 'Yggdroot/indentLine'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'tell-k/vim-autopep8'
-Plugin 'scrooloose/nerdcommenter'
-
-call vundle#end()
-filetype plugin indent on
-
 
 "默认配置文件路径"
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
@@ -90,8 +111,9 @@ let g:ycm_cache_omnifunc=0
 let g:ycm_complete_in_strings = 1
 "离开插入模式后自动关闭预览窗口"
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
 "回车即选中当前项"
-inoremap <expr> <CR>       pumvisible() ? '<C-y>' : '\<CR>'
+"inoremap <expr> <CR>       pumvisible() ? '<C-y>' : '\<CR>'
 "上下左右键行为"
 inoremap <expr> <Down>     pumvisible() ? '\<C-n>' : '\<Down>'
 inoremap <expr> <Up>       pumvisible() ? '\<C-p>' : '\<Up>'
