@@ -71,7 +71,7 @@ let g:syntastic_auto_loc_list = 2
 "修改Locaton List窗口高度
 let g:syntastic_loc_list_height = 3
 "打开文件时自动进行检查
-let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
 "自动跳转到发现的第一个错误或警告处
 let g:syntastic_auto_jump = 1
